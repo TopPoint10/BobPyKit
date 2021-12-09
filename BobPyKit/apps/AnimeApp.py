@@ -10,7 +10,9 @@ class Anime:
     # self.character_URL = "https://myanimelist.net/character.php?q={query}&cat=character"
 
 
-  def anime_search(self, anime:str):
+  def anime_search(self, anime:str = None):
+    if anime == None:
+      return 'No anime name provided'
     url = self.anime_URL.format(query=anime)
     
     html = httpx.get(url)
