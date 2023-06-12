@@ -1,5 +1,6 @@
 import aiohttp
 from bs4 import BeautifulSoup
+import httpx
 
 class Wikipedia:
   def __init__(self, query, words = None):
@@ -8,13 +9,12 @@ class Wikipedia:
   
   """Made a method to generate results but it should idealy call something else, fetch 
   result method shoud be used in case no page/results for the passed query is found please check later"""
-  async def fetchResults(self):
+  def fetchResults(self):
 
-    async with aiohttp.ClientSession() as cs:
-      async with cs.get(f"https://en.wikipedia.org/wiki/{self.query}") as r:
-        html = await r.text()
-
+    
+    html = httpx.get(f"https://en.wikipedia.org/wiki/{self.query}")
     soup = BeautifulSoup(html, 'html.parser')
+
     description_len = len(soup.find_all("p"))
     description_list = []
     image_list = []

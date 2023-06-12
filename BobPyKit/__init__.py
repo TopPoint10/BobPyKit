@@ -1,3 +1,3 @@
-from .apps import AnimeApp
-from .apps import NewsApp
-from .apps import WikiApp
+from .apps.AnimeApp import *
+from .apps.NewsApp import *
+from .apps.WikiApp import *

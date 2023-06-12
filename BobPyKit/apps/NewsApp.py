@@ -1,5 +1,6 @@
 import aiohttp
 from bs4 import BeautifulSoup
+import httpx
 
 class NewsApp:
   """  This is class for News app """
@@ -10,12 +11,10 @@ class NewsApp:
 
 
   """ This get the latest news Headlines """
-  async def getNewsTitles(self):
+  def getNewsTitles(self):
     url = "https://www.bbc.com/news"
     
-    async with aiohttp.ClientSession() as cs:
-      async with cs.get(url) as r:
-        html = await r.text()
+    html = httpx.get(url)
     soup = BeautifulSoup(html, 'html.parser')
                                   
     news_title_tag = soup.find_all("h3", class_="gs-c-promo-heading__title")
@@ -38,18 +37,14 @@ class NewsApp:
 
 
   """ This gets info from a news link given (of bbc only) """
-  async def getNewsAll(self, url:str):
-    async with aiohttp.ClientSession() as cs:
-      async with cs.get(url) as r:
-        html = await r.text()
+  def getNewsAll(self, url:str):
+    html = httpx.get(url)
     soup = BeautifulSoup(html, 'html.parser')
 
     if not url.startswith("https://www.bbc.com/news/"):
       return "Error: you have not entered the correct bbc url"
     else:
-      async with aiohttp.ClientSession() as cs:
-        async with cs.get(url) as r:
-          html = await r.text()
+      html = httpx.get(url)
       soup = BeautifulSoup(html, 'html.parser')
       
       author = soup.find("p", class_="ssrcss-1rv0moy-Contributor").find("span").find("strong").text
