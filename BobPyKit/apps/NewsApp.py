@@ -1,17 +1,18 @@
-import aiohttp
 from bs4 import BeautifulSoup
 import httpx
 
 class NewsApp:
   """  This is class for News app """
-  def __init__(self, query=None, words = None):
+  def __init__(self, query=None, words = None) -> None: 
     self.query = query
     self.words = words
 
 
 
-  """ This get the latest news Headlines """
-  def getNewsTitles(self):
+  
+  def getNewsTitles(self) -> dict:
+    """ Gets the latest news Headlines """
+
     url = "https://www.bbc.com/news"
     
     html = httpx.get(url)
@@ -23,21 +24,24 @@ class NewsApp:
     news_link_tag = soup.find_all("a", class_="gs-c-promo-heading")
     news_link = []
 
-    # fetching wanted material from the list of tags
     for i in news_title_tag:
       news_title.append(i.text)
 
     for i in news_link_tag:
       i.find("a", href=True)
       news_link.append("https://www.bbc.com" + i["href"])
-    
-    news_info = {"title" : [i for i in news_title], "link" : [i for i in news_link]}
+
+    titles = [i for i in news_title]
+    links = [i for i in news_link]
+
+    news_info = {"title": titles, "link": links}
 
     return news_info
 
 
-  """ This gets info from a news link given (of bbc only) """
-  def getNewsAll(self, url:str):
+  def getNewsAll(self, url:str) -> dict:
+    """ This gets info from a news link given (of bbc only) """
+
     html = httpx.get(url)
     soup = BeautifulSoup(html, 'html.parser')
 
@@ -52,13 +56,18 @@ class NewsApp:
       desc = soup.find_all("div", class_="ssrcss-uf6wea-RichTextComponentWrapper")
       desc_tag_list = []
       desc_list = []
+
       for i in range(len(desc)):
         if desc[i].find("p") == None:
           pass
         else:
           desc_tag_list.append(desc[i].find("p"))
+
       for i in desc_tag_list:
         desc_list.append(i.text)
+
       title = str(soup.find("title").text)[:-11]
+
       all_news_info = {"author": author, "title" : title, "description" : desc_list}
+
       return all_news_info

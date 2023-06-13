@@ -1,23 +1,22 @@
-import aiohttp
 from bs4 import BeautifulSoup
 import httpx
 
 class Wikipedia:
-  def __init__(self, query, words = None):
+  """ A Wikipedia Scrapper """
+  def __init__(self, query, words = None) -> None:
     self.query = query
     self.words = words
   
-  """Made a method to generate results but it should idealy call something else, fetch 
-  result method shoud be used in case no page/results for the passed query is found please check later"""
-  def fetchResults(self):
 
+  def fetchResults(self) -> dict:
+    """ Searches for the query on wikipedia and returns data"""
     
     html = httpx.get(f"https://en.wikipedia.org/wiki/{self.query}")
     soup = BeautifulSoup(html, 'html.parser')
 
     description_len = len(soup.find_all("p"))
     description_list = []
-    image_list = []
+    image_links = []
 
     try:
       short_description = soup.find(class_="shortdescription").text
@@ -30,12 +29,14 @@ class Wikipedia:
 
       image_tag = soup.find_all("a", class_="image", href=True)
       for i in image_tag:
-        image_list.append("https://en.wikipedia.org" + i["href"])
+        image_links.append("https://en.wikipedia.org" + i["href"])
 
       if self.words != None:
-        return title, short_description, str(description[0])[:self.words], image_list
+        data = {"title": title, "short_description": short_description, "description": str(description[0])[:self.words], "image_links": image_links}
+        return data
       else:
-        return title, short_description, str(description[0]), image_list
+        data = {"title": title, "short_description": short_description, "description": str(description[0]), "image_links": image_links}
+        return data
 
     except Exception as e:
       raise e
