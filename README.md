@@ -1,6 +1,6 @@
 # BobPyKit
 ### A multitasking module for Python 
-##### comes with commands such as
+##### comes with commands such as,
 - [Anime](https://github.com/TopPoint10/BobPyKit/blob/main/BobPyKit/apps/AnimeApp.py)
 - [BBC News](https://github.com/TopPoint10/BobPyKit/blob/main/BobPyKit/apps/NewsApp.py)
 - [Wikipedia Scrapper](https://github.com/TopPoint10/BobPyKit/blob/main/BobPyKit/apps/WikiApp.py)
